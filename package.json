@@ -15,6 +15,11 @@
     "eslint",
     "prepublish"
   ],
+  "files": [
+    "dist",
+    "lib",
+    "src"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lizongze/importOndemand.git"
