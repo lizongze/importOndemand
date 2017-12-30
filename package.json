@@ -1,0 +1,49 @@
+{
+  "name": "babel-plugin-import-ondemand",
+  "version": "1.0.0",
+  "description": "demo ",
+  "main": "index.js",
+  "scripts": {
+    "eslint": "echo \"代码检测中...\" && eslint ./src *.js --cache",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src --out-dir lib",
+    "prepublish": "babel src --out-dir lib && NODE_ENV=production ./node_modules/webpack/bin/webpack.js && NODE_ENV=dev ./node_modules/webpack/bin/webpack.js",
+    "buildPrd": "NODE_ENV=production ./node_modules/webpack/bin/webpack.js",
+    "buildDev": "NODE_ENV=dev ./node_modules/webpack/bin/webpack.js"
+  },
+  "pre-commit": [
+    "eslint",
+    "prepublish"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lizongze/importOndemand.git"
+  },
+  "keywords": [
+    "babel",
+    "plugin",
+    "import",
+    "ondemand"
+  ],
+  "author": "zongze.li",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lizongze/importOndemand/issues"
+  },
+  "homepage": "https://github.com/lizongze/importOndemand#readme",
+  "dependencies": {},
+  "peerDependencies": {
+    "assert": "^1.4.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "eslint": "^3.17.1",
+    "eslint-config-rnx": "^1.0.4",
+    "pre-commit": "^1.2.2",
+    "webpack": "^3.10.0"
+  }
+}
