@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-import-ondemand",
-  "version": "0.0.1-beta.0",
+  "version": "0.0.1-beta.1",
   "description": "demo",
   "main": "lib/index.js",
   "scripts": {
