@@ -24,16 +24,20 @@ const genPlugin = function ({ types }) { // eslint-disable-line
         plugins = opts.map(({
           libraryName,
           libraryDirectory,
+          style,
           camel2DashComponentName,
           camel2UnderlineComponentName,
+          fileName,
           customName,
         }) => {
           assert(libraryName, 'libraryName should be provided');
           return new Plugin(
             libraryName,
             libraryDirectory,
+            style,
             camel2DashComponentName,
             camel2UnderlineComponentName,
+            fileName,
             customName,
             types
           );
@@ -44,8 +48,10 @@ const genPlugin = function ({ types }) { // eslint-disable-line
           new Plugin(
             opts.libraryName,
             opts.libraryDirectory,
+            opts.style,
             opts.camel2DashComponentName,
             opts.camel2UnderlineComponentName,
+            opts.fileName,
             opts.customName,
             types
           ),

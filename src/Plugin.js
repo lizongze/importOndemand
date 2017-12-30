@@ -1,4 +1,6 @@
 /* eslint-disable new-cap */
+const pathModule = require('path');
+
 function camel2Dash(_str) {
   const str = _str[0].toLowerCase() + _str.substr(1);
   return str.replace(/([A-Z])/g, $1 => `-${$1.toLowerCase()}`);
@@ -10,20 +12,28 @@ function camel2Underline(_str) {
   return ret;
 }
 
+function replaceWinPath(path) {
+  return path.replace(/\\/g, '/');
+}
+
 class Plugin {
   constructor(
     libraryName,
     libraryDirectory = 'lib',
-    camel2DashComponentName,
+    style = false,
+    camel2DashComponentName = true,
     camel2UnderlineComponentName,
-    customName = v => v,
+    fileName = '',
+    customName,
     types
   ) {
     this.libraryName = libraryName;
     this.libraryDirectory = libraryDirectory;
+    this.style = style;
     this.camel2DashComponentName = camel2DashComponentName;
     this.camel2UnderlineComponentName = camel2UnderlineComponentName;
     this.customName = customName;
+    this.fileName = fileName;
     this.types = types;
   }
 
@@ -33,7 +43,27 @@ class Plugin {
       : this.camel2DashComponentName
         ? camel2Dash(methodName)
         : methodName;
-    return this.customName(ret);
+    return ret;
+  }
+
+  getPath(value, methodName) {
+    const fileName = this.fileName;
+    return !this.customName
+      ? replaceWinPath(pathModule.join(value, this.libraryDirectory, methodName, fileName))
+      : this.customName(methodName);
+  }
+
+  pushStyle(specs, pathname) {
+    let styleStr = '/style';
+    if (this.style) {
+      if (this.style === 'css') {
+        styleStr = '/style/css';
+      }
+      const types = this.types;
+      specs.push(
+        types.importDeclaration([], types.stringLiteral(`${pathname}${styleStr}`))
+      );
+    }
   }
 
   ImportDeclaration(path) {
@@ -49,29 +79,27 @@ class Plugin {
     ) {
       isAllImport = true;
     }
-
-    const newSpecs = specifiers.map((spec) => {
+    const newSpecs = [];
+    specifiers.forEach((spec) => {
       const { imported = {}, local, type: typeName } = spec;
-      const importedName = imported.name || local.name;
+      const importedName = this.transformedMethodName(imported.name || local.name);
+
       if (
         typeName !== 'ImportSpecifier'
         // typeName === 'ImportNamespaceSpecifier' ||
         // typeName === 'ImportDefaultSpecifier'
       ) {
         isAllImport = true;
-        return undefined;
+        return;
       }
-
-      return types.importDeclaration(
+      const pathname = this.getPath(value, importedName);
+      newSpecs.push(types.importDeclaration(
         [types.ImportDefaultSpecifier(
           types.identifier(local.name)
         )],
-        types.stringLiteral(
-          `${value}/${this.libraryDirectory}/${
-            this.transformedMethodName(importedName)
-          }`
-        )
-      );
+        types.stringLiteral(pathname)
+      ));
+      this.pushStyle(newSpecs, pathname);
     });
 
     if (isAllImport) return;
@@ -92,28 +120,27 @@ class Plugin {
       isAllImport = true;
     }
 
-    const newSpecs = specifiers.map((spec) => {
+    const newSpecs = [];
+    specifiers.forEach((spec) => {
       const { exported, local, type: typeName } = spec;
       if (
         typeName !== 'ExportSpecifier' ||
         local.name === 'default'
       ) {
         isAllImport = true;
-        return undefined;
+        return;
       }
-
-      return types.exportNamedDeclaration(
+      const localName = this.transformedMethodName(local.name);
+      const pathname = this.getPath(value, localName);
+      newSpecs.push(types.exportNamedDeclaration(
         null,
         [types.exportSpecifier(
           types.identifier('default'),
           types.identifier(exported.name),
         )],
-        types.stringLiteral(
-          `${value}/${this.libraryDirectory}/${
-            this.transformedMethodName(local.name)
-          }`
-        )
-      );
+        types.stringLiteral(pathname)
+      ));
+      this.pushStyle(newSpecs, pathname);
     });
 
     if (isAllImport) return;
@@ -168,5 +195,34 @@ export { default as Time } from 'antd/lib/Time';
 export { default as bacnAntd3 } from 'antd';
 export { Col1 };
 export {};
+
+Test v1.5.0
+    ✓ should work with as arguments
+    ✓ should work with as arguments identifier
+    ✓ should work with binary expression
+    ✓ should work with conditions
+    ✓ should work with custom name
+    ✓ should work with execute direct
+    ✓ should work with execute member
+    ✓ should work with export import
+    ✓ should work with expression statement
+    ✓ should work with file name
+    ✓ should work with import alias
+  ✓ 1) should work with import css
+    ✓ should work with material ui
+    2) should work with member expression
+    3) should work with modules false
+  ✓ 4) should work with multiple libraries
+  ✓ 5) should work with multiple libraries hilojs
+    ✓ should work with multiple words
+    ✓ should work with new expression
+    ✓ should work with object shorthand
+    ✓ should work with property
+    ✓ should work with react element
+    ✓ should work with react toolbox
+    ✓ should work with return
+    ✓ should work with specifier alias
+    ✓ should work with variable declarator
+    ✓ should work with variable scope
 
  */

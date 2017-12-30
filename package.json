@@ -1,11 +1,11 @@
 {
-  "name": "babel-plugin-import-ondemand",
+  "name": "babel-plugin-import-ondemand-1",
   "version": "0.0.1-alpha.1",
   "description": "demo",
   "main": "lib/index.js",
   "scripts": {
     "eslint": "echo \"代码检测中...\" && eslint ./src *.js --cache",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "babel-node node_modules/.bin/babel-istanbul cover node_modules/.bin/_mocha --no-timeouts",
     "build": "babel src --out-dir lib",
     "prepublish": "babel src --out-dir lib && NODE_ENV=production ./node_modules/webpack/bin/webpack.js && NODE_ENV=dev ./node_modules/webpack/bin/webpack.js",
     "buildPrd": "NODE_ENV=production ./node_modules/webpack/bin/webpack.js",
@@ -36,7 +36,9 @@
     "url": "https://github.com/lizongze/importOndemand/issues"
   },
   "homepage": "https://github.com/lizongze/importOndemand#readme",
-  "dependencies": {},
+  "dependencies": {
+    "babel-plugin-import-ondemand": "0.0.1-alpha.1"
+  },
   "peerDependencies": {
     "assert": "^1.4.1"
   },
@@ -49,6 +51,13 @@
     "eslint": "^3.17.1",
     "eslint-config-rnx": "^1.0.4",
     "pre-commit": "^1.2.2",
-    "webpack": "^3.10.0"
+    "webpack": "^3.10.0",
+    "expect": "^1.13.4",
+    "material-ui": "^0.15.4",
+    "mocha": "^2.3.4",
+    "coveralls": "^2.11.6",
+    "babel-istanbul": "^0.7.0",
+    "babel-plugin-add-module-exports": "^0.1.2",
+    "babel-preset-react": "^6.16.0"
   }
 }
