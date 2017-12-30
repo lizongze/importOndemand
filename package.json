@@ -40,7 +40,7 @@
     "babel-plugin-import-ondemand": "0.0.1-alpha.1"
   },
   "peerDependencies": {
-    "assert": "^1.4.1"
+    "assert": "^1.x"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
