@@ -9,8 +9,8 @@
     "build": "babel src --out-dir lib",
     "prepublish": "babel src --out-dir lib && NODE_ENV=production ./node_modules/webpack/bin/webpack.js && NODE_ENV=dev ./node_modules/webpack/bin/webpack.js",
     "buildPrd": "NODE_ENV=production ./node_modules/webpack/bin/webpack.js",
-    "buildDev": "NODE_ENV=dev ./node_modules/webpack/bin/webpack.js",
-    "pre-commit-test": "echo 'pre-commit-test'; exit 1;"
+	"buildDev": "NODE_ENV=dev ./node_modules/webpack/bin/webpack.js",
+	"pre-commit-test": "echo 'pre-commit-test'; exit 1;"
   },
   "pre-commit1": [
     "eslint",
@@ -39,13 +39,11 @@
   "homepage": "https://github.com/lizongze/importOndemand#readme",
   "dependencies": {
     "babel-plugin-import-ondemand": "0.0.1-alpha.1",
-    "pre-commit-for-rush": "^2.4.0",
+    "pre-commit-for-rush": "^2.0.0",
     "pre-push-for-rush": "^2.0.2"
   },
   "pre-push": [],
-  "pre-commit": [
-    "pre-commit-test"
-  ],
+  "pre-commit": ["pre-commit-test"],
   "peerDependencies": {
     "assert": "^1.x"
   },
