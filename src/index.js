@@ -1,6 +1,6 @@
 const assert = require('assert');
 const Plugin = require('./Plugin');
-
+var test;
 const genPlugin = function ({ types }) { // eslint-disable-line
   let plugins = null;
 
@@ -16,6 +16,7 @@ const genPlugin = function ({ types }) { // eslint-disable-line
       }
     }
   }
+
 
   function Program(path, { opts = {} }) {
     // Init plugin instances once.
